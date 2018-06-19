@@ -1,12 +1,21 @@
 package modelos;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 public class Usuario {
+
+    @Id
+    @GeneratedValue
     private long id;
+
     private String username;
     private String nombre;
     private String password;
     private boolean administrador;
     private boolean autor;
+
+    public Usuario(){};
 
     public String getUsername() {
         return username;

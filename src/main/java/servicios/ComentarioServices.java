@@ -8,7 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,8 +42,8 @@ public class ComentarioServices {
         return ok;
 
     }
-    public static List<Comentario> getComentarioByArticuloID(long articuloID){
-        List<Comentario> lista = new ArrayList<>();
+    public static Set<Comentario> getComentarioByArticuloID(long articuloID){
+        Set<Comentario> lista = new HashSet<>();
         Connection con = null; //objeto conexion.
         try {
 

@@ -5,9 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +26,7 @@ public class ArticuloServices {
                 articulo.setId(ID);
                 articulo.setAutor(UsuarioServices.getUsuario(rs.getLong("usuarioid") ) );
                 articulo.setComentarios(ComentarioServices.getComentarioByArticuloID(ID));
-                articulo.setEtiquetas(EtiquetaServices.getEtiquetaByArticuloID(ID));
+                articulo.setEtiquetas(new HashSet<>( EtiquetaServices.getEtiquetaByArticuloID(ID)));
                 String cuerpo = rs.getString("cuerpo");
                 //era 70 el limite pero con 200 se ve mejorsito
                 articulo.setCuerpo( cuerpo.substring(0, min(200,cuerpo.length())) + "...");
@@ -68,7 +66,7 @@ public class ArticuloServices {
                 articulo.setId(ID);
                 articulo.setAutor(UsuarioServices.getUsuario(rs.getLong("usuarioid") ) );
                 articulo.setComentarios(ComentarioServices.getComentarioByArticuloID(ID));
-                articulo.setEtiquetas(EtiquetaServices.getEtiquetaByArticuloID(ID));
+                articulo.setEtiquetas(new HashSet<>( EtiquetaServices.getEtiquetaByArticuloID(ID) ) );
                 articulo.setCuerpo(rs.getString("cuerpo"));
                 articulo.setFecha(rs.getDate("fecha"));
                 articulo.setTitulo(rs.getString("titulo"));

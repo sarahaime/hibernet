@@ -1,9 +1,18 @@
 package modelos;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 public class Etiqueta {
 
+    @Id
+    @GeneratedValue
     private long id;
+
+
     private String etiqueta;
+
+    public Etiqueta(){};
 
     public long getId() {
         return id;

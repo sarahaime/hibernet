@@ -1,11 +1,22 @@
 package modelos;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 public class Comentario {
+    @Id
+    @GeneratedValue
     private long id;
     private String comentario;
+
+    @ManyToOne
     private Usuario autor;
+
+    @ManyToOne
     private Articulo articulo;
 
+    public Comentario(){};
 
     public long getId() {
         return id;

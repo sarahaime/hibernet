@@ -11,9 +11,7 @@ import static spark.Spark.*;
 import spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Set;
 
 

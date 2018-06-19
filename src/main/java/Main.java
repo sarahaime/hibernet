@@ -24,10 +24,10 @@ public class Main {
         staticFiles.location("/templates");
 
 
-        BootStrapServices.crearTablas();
+       // BootStrapServices.crearTablas(); no se hace asi ahora
 
-        //usuario administrador por defecto
-        UsuarioServices usuarioServices = new UsuarioServices();
+        //usuario administrador por defecto todo: hay que cambiar esto
+    /*    UsuarioServices usuarioServices = new UsuarioServices();
         if(usuarioServices.listaUsuarios().size() < 1){
             Usuario administrador = new Usuario();
             administrador.setNombre("Nombre del Administrador");
@@ -38,7 +38,7 @@ public class Main {
             if( usuarioServices.crearUsuario(administrador)){
                 System.out.println("Usuario administrador creado..");
             }
-        }
+        }*/
 
 //        ArticuloServices as = new ArticuloServices();
 //        as.crearArticulo("El agua post", "cuerpesito", 1);
@@ -48,11 +48,7 @@ public class Main {
 //        es.crearEtiqueta("PROGRAMACION");
 //        es.crearEtiqueta("YOLO");
 //        es.crearEtiqueta("FOTOGRAFIA");
-//        es.crearEtiqueta("TECNOLOGIA");
-//        es.crearEtiqueta("REDES");
-//        es.crearEtiqueta("HTML");
-//        es.crearEtiqueta("FINANZAS");
-//        es.crearEtiqueta("RESTAURANTES");
+
 
         //Seteando el puerto en Heroku
         port(getHerokuAssignedPort());

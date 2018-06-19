@@ -1,16 +1,27 @@
 package modelos;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 public class Articulo {
+    @Id
+    @GeneratedValue
     private long id;
+
     private String cuerpo;
     private String titulo;
     private Date fecha;
     private Usuario autor;
-    private List<Comentario> comentarios;
-    private List<Etiqueta> etiquetas;
+
+    @OneToMany
+    private Set<Comentario> comentarios;
+
+    @ManyToMany
+    private Set<Etiqueta> etiquetas;
 
     public Articulo() {
 
@@ -56,19 +67,19 @@ public class Articulo {
         this.autor = autor;
     }
 
-    public List<Comentario> getComentarios() {
+    public Set<Comentario> getComentarios() {
         return comentarios;
     }
 
-    public void setComentarios(List<Comentario> comentarios) {
+    public void setComentarios(Set<Comentario> comentarios) {
         this.comentarios = comentarios;
     }
 
-    public List<Etiqueta> getEtiquetas() {
+    public Set<Etiqueta> getEtiquetas() {
         return etiquetas;
     }
 
-    public void setEtiquetas(List<Etiqueta> etiquetas) {
+    public void setEtiquetas(Set<Etiqueta> etiquetas) {
         this.etiquetas = etiquetas;
     }
 }
