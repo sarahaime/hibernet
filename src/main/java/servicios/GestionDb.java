@@ -1,3 +1,5 @@
+package servicios;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Id;
@@ -15,7 +17,7 @@ public class GestionDb<T> {
 
     public GestionDb(Class<T> claseEntidad) {
         if(emf == null) {
-            emf = Persistence.createEntityManagerFactory("practica4DB");
+            emf = Persistence.createEntityManagerFactory("practica4");
         }
         this.claseEntidad = claseEntidad;
 

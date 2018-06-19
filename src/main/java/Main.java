@@ -5,6 +5,9 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.sql.SQLException;
 import java.util.Set;
 
@@ -22,6 +25,12 @@ public class Main {
 
         //indicando los recursos publicos, con esto se puede acceder a ellos sin hacerle metodos get ni post ni nada de eso
         staticFiles.location("/templates");
+
+
+        EntityManagerFactory emf =  Persistence.createEntityManagerFactory("practica4");
+        EntityManager entityManager = emf.createEntityManager();
+        entityManager.getTransaction().begin();
+
 
 
        // BootStrapServices.crearTablas(); no se hace asi ahora

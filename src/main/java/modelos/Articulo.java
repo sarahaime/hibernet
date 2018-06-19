@@ -1,12 +1,10 @@
 package modelos;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
+@Entity
 public class Articulo {
     @Id
     @GeneratedValue
@@ -15,6 +13,8 @@ public class Articulo {
     private String cuerpo;
     private String titulo;
     private Date fecha;
+
+    @ManyToOne
     private Usuario autor;
 
     @OneToMany

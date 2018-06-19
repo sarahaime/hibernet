@@ -10,7 +10,7 @@ public class DB {
 
 
     private static DB instancia;
-    private String URL = "jdbc:h2:tcp://localhost/~/practica3"; //Modo servidor...
+    private String URL = "jdbc:h2:tcp://localhost/~/practica4"; //Modo servidor...
 
     private  DB(){
         registrarDriver();
