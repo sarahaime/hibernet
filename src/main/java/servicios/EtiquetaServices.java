@@ -29,14 +29,8 @@ public class EtiquetaServices extends GestionDb<Etiqueta>{
     }
 
     public List<Etiqueta> getEtiquetaByArticuloID(long articuloID){
-        EntityManager em = getEntityManager();
-        Query query = em.createQuery("select a from Articulo a where a.id =:id");
-        query.setParameter("id", articuloID);
-        List<Articulo> articulos = query.getResultList();
-        if(articulos.size() > 0){
-            return new ArrayList<>(articulos.get(0).getEtiquetas());
-        }
-        return new ArrayList<>();
+        Articulo articulo = new ArticuloServices().find(articuloID);
+        return new ArrayList<>(articulo.getEtiquetas());
     }
 
     public boolean agregarEtiquetaArticulo(long etiquetaID, long articuloID){
@@ -48,39 +42,8 @@ public class EtiquetaServices extends GestionDb<Etiqueta>{
         return true;
     }
 
-
-
-    /******************************************************************/
-    public static Etiqueta getEtiquetaByID(long id){
-        Etiqueta etiqueta = null;
-        Connection con = null;
-        try {
-            //utilizando los comodines (?)...
-            String query = "select * from ETIQUETA where id = ?";
-            con = DB.getInstancia().getConexion();
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            //Antes de ejecutar seteo los parametros.
-            prepareStatement.setLong(1, id);
-            //Ejecuto...
-            ResultSet rs = prepareStatement.executeQuery();
-            while(rs.next()){
-                etiqueta = new Etiqueta();
-                etiqueta.setId(rs.getLong("id"));
-                etiqueta.setEtiqueta(rs.getString("etiqueta"));
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(EtiquetaServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(EtiquetaServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return etiqueta;
-
+     public Etiqueta getEtiquetaByID(long id){
+        return find(id);
     }
 
 }
