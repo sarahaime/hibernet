@@ -82,4 +82,8 @@ public class Articulo {
     public void setEtiquetas(Set<Etiqueta> etiquetas) {
         this.etiquetas = etiquetas;
     }
+
+    public void agregarEtiqueta(Etiqueta e){
+        etiquetas.add(e);
+    }
 }

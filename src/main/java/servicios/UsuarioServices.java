@@ -229,8 +229,6 @@ public class UsuarioServices {
 
         if( usuario == null ){ return  null; }
 
-        System.out.println(usuario.getPassword());
-
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         if (passwordEncryptor.checkPassword(pass, usuario.getPassword())) {
             return usuario;

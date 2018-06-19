@@ -1,6 +1,8 @@
 package servicios;
 
 import modelos.Articulo;
+import modelos.Etiqueta;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +13,12 @@ import java.util.logging.Logger;
 
 import static java.lang.Math.min;
 
-public class ArticuloServices {
+public class ArticuloServices extends GestionDb<Articulo>{
+
+    public ArticuloServices(){
+        super(Articulo.class);
+    }
+
     public List<Articulo> listaArticulos() {
         List<Articulo> lista = new ArrayList<>();
         Connection con = null; //objeto conexion.
@@ -26,7 +33,7 @@ public class ArticuloServices {
                 articulo.setId(ID);
                 articulo.setAutor(UsuarioServices.getUsuario(rs.getLong("usuarioid") ) );
                 articulo.setComentarios(ComentarioServices.getComentarioByArticuloID(ID));
-                articulo.setEtiquetas(new HashSet<>( EtiquetaServices.getEtiquetaByArticuloID(ID)));
+                articulo.setEtiquetas(new HashSet<>( new EtiquetaServices().getEtiquetaByArticuloID(ID)));
                 String cuerpo = rs.getString("cuerpo");
                 //era 70 el limite pero con 200 se ve mejorsito
                 articulo.setCuerpo( cuerpo.substring(0, min(200,cuerpo.length())) + "...");
@@ -66,7 +73,7 @@ public class ArticuloServices {
                 articulo.setId(ID);
                 articulo.setAutor(UsuarioServices.getUsuario(rs.getLong("usuarioid") ) );
                 articulo.setComentarios(ComentarioServices.getComentarioByArticuloID(ID));
-                articulo.setEtiquetas(new HashSet<>( EtiquetaServices.getEtiquetaByArticuloID(ID) ) );
+                articulo.setEtiquetas(new HashSet<>( new EtiquetaServices().getEtiquetaByArticuloID(ID) ) );
                 articulo.setCuerpo(rs.getString("cuerpo"));
                 articulo.setFecha(rs.getDate("fecha"));
                 articulo.setTitulo(rs.getString("titulo"));
@@ -108,7 +115,7 @@ public class ArticuloServices {
             ResultSet rs = prepareStatement.executeQuery();
             if(rs.next()){
                 long articuloid = rs.getLong("id");
-                agregarTags(articuloid, tags);
+
             }
 
         } catch (SQLException ex) {

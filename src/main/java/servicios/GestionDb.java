@@ -24,7 +24,7 @@ public class GestionDb<T> {
     }
 
     public EntityManager getEntityManager(){
-        return emf.createEntityManager();
+        return Persistence.createEntityManagerFactory("practica4").createEntityManager();
     }
 
     /**

@@ -30,10 +30,11 @@ public class Main {
         EntityManagerFactory emf =  Persistence.createEntityManagerFactory("practica4");
         EntityManager entityManager = emf.createEntityManager();
         entityManager.getTransaction().begin();
+        entityManager.close();
 
 
 
-       // BootStrapServices.crearTablas(); no se hace asi ahora
+
 
         //usuario administrador por defecto todo: hay que cambiar esto
     /*    UsuarioServices usuarioServices = new UsuarioServices();
@@ -52,8 +53,8 @@ public class Main {
 //        ArticuloServices as = new ArticuloServices();
 //        as.crearArticulo("El agua post", "cuerpesito", 1);
 
-//        EtiquetaServices es = new EtiquetaServices();
-//        es.crearEtiqueta("COCINA");
+        EtiquetaServices es = new EtiquetaServices();
+        es.crearEtiqueta("COCINA");
 //        es.crearEtiqueta("PROGRAMACION");
 //        es.crearEtiqueta("YOLO");
 //        es.crearEtiqueta("FOTOGRAFIA");

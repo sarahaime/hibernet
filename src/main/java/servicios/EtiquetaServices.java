@@ -1,7 +1,11 @@
 package servicios;
 
+import modelos.Articulo;
 import modelos.Etiqueta;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,81 +15,42 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class EtiquetaServices{
+public class EtiquetaServices extends GestionDb<Etiqueta>{
+
+    public EtiquetaServices(){
+        super(Etiqueta.class);
+    }
+
     public boolean crearEtiqueta(String etiqueta){
-        boolean ok =false;
-        Connection con = null;
-        try {
-            String query = "insert into ETIQUETA (ETIQUETA) values(?)";
-            con = DB.getInstancia().getConexion();
-            //
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            //Antes de ejecutar seteo los parametros
-            prepareStatement.setString(1, etiqueta);
-            int fila = prepareStatement.executeUpdate();
-            ok = fila > 0 ;
-        } catch (SQLException ex) {
-            Logger.getLogger(EtiquetaServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(EtiquetaServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return ok;
+        Etiqueta et = new Etiqueta();
+        et.setEtiqueta(etiqueta);
+        crear( et );
+        return true;
     }
-    public static List<Etiqueta> getEtiquetaByArticuloID(long articuloID){
-        List<Etiqueta> lista = new ArrayList<>();
-        Connection con = null; //objeto conexion.
-        try {
-            String query = "select * from ETIQUETA  where ARTICULOID = ?";
-            con = DB.getInstancia().getConexion();
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            //Antes de ejecutar seteo los parametros.
-            prepareStatement.setLong(1, articuloID);
 
-            ResultSet rs = prepareStatement.executeQuery();
-            while(rs.next()){
-                long id = rs.getLong("id");
-                lista.add(getEtiquetaByID(id));
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(EtiquetaServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(EtiquetaServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    public List<Etiqueta> getEtiquetaByArticuloID(long articuloID){
+        EntityManager em = getEntityManager();
+        Query query = em.createQuery("select a from Articulo a where a.id =:id");
+        query.setParameter("id", articuloID);
+        List<Articulo> articulos = query.getResultList();
+        if(articulos.size() > 0){
+            return new ArrayList<>(articulos.get(0).getEtiquetas());
         }
-        return lista;
-
+        return new ArrayList<>();
     }
+
     public boolean agregarEtiquetaArticulo(long etiquetaID, long articuloID){
-        boolean ok =false;
-        Connection con = null;
-        try {
-            String query = "insert into ETIQUETA (ETIQUETAID, ARTICULOID) values(?, ?)";
-            con = DB.getInstancia().getConexion();
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            //Antes de ejecutar seteo los parametros
-            prepareStatement.setLong(1, etiquetaID);
-            prepareStatement.setLong(2, articuloID);
-            int fila = prepareStatement.executeUpdate();
-            ok = fila > 0 ;
-        } catch (SQLException ex) {
-            Logger.getLogger(EtiquetaServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(EtiquetaServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return ok;
+        Articulo articulo = new ArticuloServices().find(articuloID);
+        Etiqueta etiqueta = find(etiquetaID);
+        articulo.agregarEtiqueta( etiqueta );
+        new ArticuloServices().editar(articulo);
+
+        return true;
     }
+
+
+
+    /******************************************************************/
     public static Etiqueta getEtiquetaByID(long id){
         Etiqueta etiqueta = null;
         Connection con = null;
