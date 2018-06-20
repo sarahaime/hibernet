@@ -38,7 +38,6 @@ dependencies {
 
     //para enviar json y comunicarse con calquiera
     compile 'com.google.code.gson:gson:2.6.2'
-
 }
 version '1.0-SNAPSHOT'
 

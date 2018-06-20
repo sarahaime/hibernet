@@ -1,5 +1,7 @@
 package modelos;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -13,6 +15,9 @@ public class Articulo {
     @Column(columnDefinition = "text")
     private String cuerpo;
     private String titulo;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
 
     @ManyToOne

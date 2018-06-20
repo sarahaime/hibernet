@@ -14,11 +14,12 @@ package servicios;
  import java.util.logging.Level;
  import java.util.logging.Logger;
 
-public class ValoracionServices extends GestionDb<Valoracion>{
+public class ValoracionServices extends GestionDb<Valoracion> {
 
-    public ValoracionServices(){
-        super(Valoracion.class);
-    }
+ public ValoracionServices() {
+  super(Valoracion.class);
+ }
+}
 
 
 

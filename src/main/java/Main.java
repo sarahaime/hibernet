@@ -36,7 +36,7 @@ public class Main {
 
 
 
-        //usuario administrador por defecto todo: hay que cambiar esto
+        //usuario administrador por defecto
        UsuarioServices usuarioServices = new UsuarioServices();
         if(usuarioServices.listaUsuarios().size() < 1){
             Usuario administrador = new Usuario();
@@ -51,7 +51,7 @@ public class Main {
         }
 
 //        ArticuloServices as = new ArticuloServices();
-//        as.crearArticulo("El agua post", "cuerpesito", 33, "hambre, frio, sueño");
+//        as.crearArticulo("El agua post", "cuerpesit00ao", 33, "comida, frio, sueño");
 //        EtiquetaServices es = new EtiquetaServices();
 //        es.crearEtiqueta("COCINA");
 //        es.crearEtiqueta("PROGRAMACION");

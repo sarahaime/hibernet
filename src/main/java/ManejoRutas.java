@@ -188,10 +188,13 @@ public class ManejoRutas {
 
 
         get("/articulos", (request, response)->{
-
+            int sz = Integer.parseInt(request.queryParams("sz"));
+            int pagina = Integer.parseInt(request.queryParams("pagina"));
+            ArticuloServices as = new ArticuloServices();
             Map<String, Object> modelo = new HashMap<>();
-            modelo.put("todosArticulos", new ArticuloServices().listaArticulos());
-            modelo.put("parametro", "parametro del articulo");
+
+            modelo.put("articulos", as.listaArticulos(pagina, sz));
+            modelo.put("cantidad", as.getCantidadArticulos());
 
             return modelo;
         }, jsonTransformer);

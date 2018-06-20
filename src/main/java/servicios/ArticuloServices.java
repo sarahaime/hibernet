@@ -21,11 +21,35 @@ public class ArticuloServices extends GestionDb<Articulo>{
 
     public List<Articulo> listaArticulos() {
         EntityManager em = getEntityManager();
-        Query query = em.createQuery("select a from Articulo a");
+        Query query = em.createQuery("select a from Articulo a order by a.id desc");
         List<Articulo> lista = query.getResultList();
         em.close();
         return lista;
     }
+
+    public List<Articulo> listaArticulos(int pagina, int sz) {
+        EntityManager em = getEntityManager();
+        Query queryList = em.createQuery("select a from Articulo a order by a.id desc");
+
+        /****paginacion****/
+        queryList.setFirstResult((pagina-1)*sz);
+        queryList.setMaxResults(sz);
+
+        List<Articulo> lista = queryList.getResultList();
+
+        em.close();
+        return lista;
+    }
+
+
+    public long getCantidadArticulos(){
+        EntityManager em = getEntityManager();
+        Query queryCount= em.createQuery("select count(a.id) from Articulo a");
+        long cant = (long) queryCount.getSingleResult();
+        em.close();
+        return cant;
+    }
+
 
     public Articulo getArticulo(long id) {
         return find(id);
