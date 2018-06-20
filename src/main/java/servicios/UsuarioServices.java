@@ -3,6 +3,10 @@ package servicios;
 import modelos.Usuario;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +18,10 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UsuarioServices {
+public class UsuarioServices extends  GestionDb<Usuario>{
+
+    public UsuarioServices() {super(Usuario.class);}
+
 
     public List<Usuario> listaUsuarios() {
         List<Usuario> lista = new ArrayList<>();
