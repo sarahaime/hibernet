@@ -20,12 +20,6 @@ public class UsuarioServices extends GestionDb<Usuario>{
         super(Usuario.class);
     }
 
-    public boolean crearUsuario(String usuario){
-       Usuario us = new Usuario();
-        us.setUsuario(usuario);
-        crear( us );
-        return true;
-    }
 
     public List<Usuario> listaUsuarios() {
         List<Usuario> lista = new ArrayList<>();
