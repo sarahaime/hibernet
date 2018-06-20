@@ -9,6 +9,8 @@
         <class>modelos.Comentario</class>
         <class>modelos.Articulo</class>
         <class>modelos.Etiqueta</class>
+        <class>modelos.Valoracion</class>
+
         <properties>
             <!--<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test" />-->
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/practica4" />
