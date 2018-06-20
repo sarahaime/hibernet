@@ -46,4 +46,26 @@ public class EtiquetaServices extends GestionDb<Etiqueta>{
         return find(id);
     }
 
+    //si no existe la etiqueta, la crea y la busca,
+    //podria tener problemas de concurrencia pera para este caso es OK
+     public Etiqueta getEtiquetaByName(String name){
+         Etiqueta etiqueta = null;
+
+         EntityManager em = getEntityManager();
+         Query query = em.createQuery("select e from Etiqueta e where e.etiqueta =:name");
+         query.setParameter("name", name.trim().toUpperCase());
+         List<Etiqueta> lista = query.getResultList();
+         em.close();
+
+         if(lista.size() > 0){
+             etiqueta = lista.get(0);
+         }else{
+             etiqueta = new Etiqueta();
+             etiqueta.setEtiqueta(name.toUpperCase());
+             crear(etiqueta);
+             return getEtiquetaByName(name);
+         }
+        return etiqueta;
+    }
+
 }

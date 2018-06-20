@@ -1,5 +1,6 @@
 package modelos;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,7 +15,11 @@ public class Usuario {
     private String username;
     private String nombre;
     private String password;
+
+    @Column(columnDefinition =  "boolean default false")
     private boolean administrador;
+
+    @Column(columnDefinition =  "boolean default false")
     private boolean autor;
 
     public Usuario(){};

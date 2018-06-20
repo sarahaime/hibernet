@@ -10,6 +10,7 @@ import static spark.Spark.*;
 
 import spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
+import transformaciones.Json;
 
 import java.util.*;
 import java.util.Set;
@@ -27,6 +28,8 @@ public class ManejoRutas {
 
 
     public void rutas(){
+
+        Json jsonTransformer = new Json();
 
         get("/home", (request, response) -> {
             ArticuloServices as = new ArticuloServices();
@@ -183,6 +186,15 @@ public class ManejoRutas {
             return "";
         });
 
+
+        get("/articulos", (request, response)->{
+
+            Map<String, Object> modelo = new HashMap<>();
+            modelo.put("todosArticulos", new ArticuloServices().listaArticulos());
+            modelo.put("parametro", "parametro del articulo");
+
+            return modelo;
+        }, jsonTransformer);
 
 
 

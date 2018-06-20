@@ -3,6 +3,8 @@ package servicios;
 import modelos.Usuario;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,146 +24,39 @@ public class UsuarioServices extends GestionDb<Usuario>{
 
 
     public List<Usuario> listaUsuarios() {
-        List<Usuario> lista = new ArrayList<>();
-        Connection con = null; //objeto conexion.
-        try {
-
-            String query = "select * from USUARIO";
-            con = DB.getInstancia().getConexion(); //referencia a la conexion.
-            //
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            ResultSet rs = prepareStatement.executeQuery();
-            while(rs.next()){
-                Usuario usuario = new Usuario();
-                usuario.setId(rs.getLong("id"));
-                usuario.setNombre(rs.getString("nombre"));
-                usuario.setUsername(rs.getString("username"));
-                usuario.setPassword(rs.getString("password"));
-                usuario.setAdministrador(rs.getBoolean("administrador"));
-                usuario.setAutor(rs.getBoolean("autor"));
-
-                lista.add(usuario);
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
+        EntityManager em = getEntityManager();
+        Query query = em.createQuery("select u from Usuario u");
+        List<Usuario> lista = query.getResultList();
+        em.close();
         return lista;
     }
 
     public static Usuario getUsuario(long id) {
-        Usuario usuario = null;
-        Connection con = null;
-        try {
-            //utilizando los comodines (?)...
-            String query = "select * from Usuario where id = ?";
-            con = DB.getInstancia().getConexion();
-            //
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            //Antes de ejecutar seteo los parametros.
-            prepareStatement.setLong(1, id);
-            //Ejecuto...
-            ResultSet rs = prepareStatement.executeQuery();
-            while(rs.next()){
-                usuario = new Usuario();
-                usuario.setId(rs.getLong("id"));
-                usuario.setNombre(rs.getString("nombre"));
-                usuario.setUsername(rs.getString("username"));
-                usuario.setPassword(rs.getString("password"));
-                usuario.setAdministrador(rs.getBoolean("administrador"));
-                usuario.setAutor(rs.getBoolean("autor"));
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
+        Usuario usuario =  new UsuarioServices().find(id);
         return usuario;
     }
 
     public Usuario getUsuarioByUserName(String username) {
         Usuario usuario = null;
-        Connection con = null;
-        try {
-            //utilizando los comodines (?)...
-            String query = "select * from Usuario where USERNAME = ?";
-            con = DB.getInstancia().getConexion();
-            //
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            //Antes de ejecutar seteo los parametros.
-            prepareStatement.setString(1, username);
-            //Ejecuto...
-            ResultSet rs = prepareStatement.executeQuery();
-            while(rs.next()){
-                usuario = new Usuario();
-                usuario.setId(rs.getLong("id"));
-                usuario.setNombre(rs.getString("nombre"));
-                usuario.setUsername(rs.getString("username"));
-                usuario.setPassword(rs.getString("password"));
-                usuario.setAdministrador(rs.getBoolean("administrador"));
-                usuario.setAutor(rs.getBoolean("autor"));
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
+        EntityManager em = getEntityManager();
+        Query query = em.createQuery("select u from Usuario u where u.username =:username");
+        query.setParameter("username", username.trim());
+        List<Usuario> lista = query.getResultList();
+        if(lista.size() > 0) usuario = lista.get(0);
+        em.close();
         return usuario;
     }
 
     public boolean crearUsuario(Usuario usuario){
-        boolean ok =false;
         //para guardar la contraseña cifrada
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(usuario.getPassword());
+        usuario.setPassword(encryptedPassword);
 
-        Connection con = null;
-        try {
+        //creo al usuario
+        crear( usuario );
 
-            String query = "insert into Usuario(NOMBRE, USERNAME, PASSWORD, ADMINISTRADOR, AUTOR) values(?,?,?,?,?)";
-            con = DB.getInstancia().getConexion();
-            //
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            //Antes de ejecutar seteo los parametros
-            prepareStatement.setString(1, usuario.getNombre());
-            prepareStatement.setString(2, usuario.getUsername());
-            prepareStatement.setString(3, encryptedPassword);
-            prepareStatement.setBoolean(4, usuario.isAdministrador());
-            prepareStatement.setBoolean(5, usuario.isAutor());
-            //
-            int fila = prepareStatement.executeUpdate();
-            ok = fila > 0 ;
-
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return ok;
+        return true;
     }
 
     public boolean actualizarUsuario(Usuario usuario){

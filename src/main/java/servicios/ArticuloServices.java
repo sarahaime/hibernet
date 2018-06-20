@@ -2,11 +2,11 @@ package servicios;
 
 import modelos.Articulo;
 import modelos.Etiqueta;
+import modelos.Usuario;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,154 +20,40 @@ public class ArticuloServices extends GestionDb<Articulo>{
     }
 
     public List<Articulo> listaArticulos() {
-        List<Articulo> lista = new ArrayList<>();
-        Connection con = null; //objeto conexion.
-        try {
-            String query = "select * from ARTICULO ORDER BY ID DESC";
-            con = DB.getInstancia().getConexion(); //referencia a la conexion.
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            ResultSet rs = prepareStatement.executeQuery();
-            while(rs.next()){
-                Articulo articulo = new Articulo();
-                long ID = rs.getLong("id");
-                articulo.setId(ID);
-                articulo.setAutor(UsuarioServices.getUsuario(rs.getLong("usuarioid") ) );
-                articulo.setComentarios(ComentarioServices.getComentarioByArticuloID(ID));
-                articulo.setEtiquetas(new HashSet<>( new EtiquetaServices().getEtiquetaByArticuloID(ID)));
-                String cuerpo = rs.getString("cuerpo");
-                //era 70 el limite pero con 200 se ve mejorsito
-                articulo.setCuerpo( cuerpo.substring(0, min(200,cuerpo.length())) + "...");
-                articulo.setFecha(rs.getDate("fecha"));
-                articulo.setTitulo(rs.getString("titulo"));
-                lista.add(articulo);
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
+        EntityManager em = getEntityManager();
+        Query query = em.createQuery("select a from Articulo a");
+        List<Articulo> lista = query.getResultList();
+        em.close();
         return lista;
     }
 
-    public static Articulo getArticulo(long id) {
-        Articulo articulo = null;
-        Connection con = null;
-        try {
-            //utilizando los comodines (?)...
-            String query = "select * from Articulo where id = ?";
-            con = DB.getInstancia().getConexion();
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            //Antes de ejecutar seteo los parametros.
-            prepareStatement.setLong(1, id);
-            //Ejecuto...
-            ResultSet rs = prepareStatement.executeQuery();
-            while(rs.next()){
-                articulo = new Articulo();
-                long ID = rs.getLong("id");
-                articulo.setId(ID);
-                articulo.setAutor(UsuarioServices.getUsuario(rs.getLong("usuarioid") ) );
-                articulo.setComentarios(ComentarioServices.getComentarioByArticuloID(ID));
-                articulo.setEtiquetas(new HashSet<>( new EtiquetaServices().getEtiquetaByArticuloID(ID) ) );
-                articulo.setCuerpo(rs.getString("cuerpo"));
-                articulo.setFecha(rs.getDate("fecha"));
-                articulo.setTitulo(rs.getString("titulo"));
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return articulo;
+    public Articulo getArticulo(long id) {
+        return find(id);
     }
 
     public boolean crearArticulo(String titulo, String cuerpo, long usuarioid, String tags){
-        boolean ok =false;
-        Connection con = null;
-        try {
-            String query = "insert into ARTICULO(USUARIOID,TITULO, CUERPO) values(?,?,?)";
-            con = DB.getInstancia().getConexion();
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            //Antes de ejecutar seteo los parametros
-            prepareStatement.setLong(1, usuarioid);
-            prepareStatement.setString(2, titulo);
-            prepareStatement.setString(3, cuerpo);
-
-            int fila = prepareStatement.executeUpdate();
-            ok = fila > 0;
-
-
-            query = "select * from Articulo order by id desc";
-            con = DB.getInstancia().getConexion();
-            prepareStatement = con.prepareStatement(query);
-            //Ejecuto...
-            ResultSet rs = prepareStatement.executeQuery();
-            if(rs.next()){
-                long articuloid = rs.getLong("id");
-
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return ok;
+        Articulo articulo = new Articulo();
+        articulo.setAutor( new UsuarioServices().find(usuarioid) );
+        articulo.setTitulo(titulo);
+        articulo.setCuerpo(cuerpo);
+        articulo.setEtiquetas(generarEtiquetas(tags));
+        crear(articulo);
+        return true;
     }
 
 
     //Actualizar los Articulos.
     public boolean actualizarArticulo(String titulo, String cuerpo, long id, String tags){
-        boolean ok =false;
+        Articulo articulo = find(id);
+        articulo.setTitulo(titulo);
+        articulo.setCuerpo(cuerpo);
+        articulo.setEtiquetas(generarEtiquetas(tags));
+        crear(articulo);
 
-        Connection con = null;
-        try {
-
-            String query = "update Articulo set TITULO=?, CUERPO=? where id = ?";
-            con = DB.getInstancia().getConexion();
-
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-            //Antes de ejecutar seteo los parametros.
-            prepareStatement.setString(1, titulo);
-            prepareStatement.setString(2, cuerpo);
-
-            //Indica el where...
-            prepareStatement.setLong(3, id );
-
-            int fila = prepareStatement.executeUpdate();
-            ok = fila > 0 ;
-
-            agregarTags(id, tags);
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return ok;
+        return true;
     }
 
+    /***************************************FALTA*************************************/
     //Metodo borrar los Articulos
     public boolean borrarArticulo(long id, long usuarioid){
         boolean ok =false;
@@ -200,7 +86,6 @@ public class ArticuloServices extends GestionDb<Articulo>{
 
         return ok;
     }
-
 
     private boolean agregarTags(long articuloid, String tags){
         boolean ok =false;
@@ -257,6 +142,18 @@ public class ArticuloServices extends GestionDb<Articulo>{
 
     }
 
+    private Set<Etiqueta>generarEtiquetas(String etiquetas){
+        List<String> tagsList = Arrays.asList(etiquetas.split(",[ ]*"));
+        Set<Etiqueta> ans = new HashSet<>();
+
+        EtiquetaServices es = new EtiquetaServices();
+
+        for (String tagName : tagsList){
+            ans.add(  es.getEtiquetaByName( tagName ) );
+        }
+
+        return ans;
+    }
 
 /*
     public boolean borrarArticulo(int id){

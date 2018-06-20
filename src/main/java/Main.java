@@ -37,7 +37,7 @@ public class Main {
 
 
         //usuario administrador por defecto todo: hay que cambiar esto
-    /*    UsuarioServices usuarioServices = new UsuarioServices();
+       UsuarioServices usuarioServices = new UsuarioServices();
         if(usuarioServices.listaUsuarios().size() < 1){
             Usuario administrador = new Usuario();
             administrador.setNombre("Nombre del Administrador");
@@ -48,13 +48,12 @@ public class Main {
             if( usuarioServices.crearUsuario(administrador)){
                 System.out.println("Usuario administrador creado..");
             }
-        }*/
+        }
 
 //        ArticuloServices as = new ArticuloServices();
-//        as.crearArticulo("El agua post", "cuerpesito", 1);
-
-        EtiquetaServices es = new EtiquetaServices();
-        es.crearEtiqueta("COCINA");
+//        as.crearArticulo("El agua post", "cuerpesito", 33, "hambre, frio, sueño");
+//        EtiquetaServices es = new EtiquetaServices();
+//        es.crearEtiqueta("COCINA");
 //        es.crearEtiqueta("PROGRAMACION");
 //        es.crearEtiqueta("YOLO");
 //        es.crearEtiqueta("FOTOGRAFIA");

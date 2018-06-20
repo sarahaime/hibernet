@@ -10,6 +10,7 @@ public class Articulo {
     @GeneratedValue
     private long id;
 
+    @Column(columnDefinition = "text")
     private String cuerpo;
     private String titulo;
     private Date fecha;
@@ -17,10 +18,11 @@ public class Articulo {
     @ManyToOne
     private Usuario autor;
 
-    @OneToMany
+    //para que incluya los comentarios sin problemas
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Comentario> comentarios;
 
-    @ManyToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Etiqueta> etiquetas;
 
     public Articulo() {

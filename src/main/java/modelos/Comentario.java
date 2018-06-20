@@ -1,15 +1,14 @@
 package modelos;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Comentario {
     @Id
     @GeneratedValue
     private long id;
+
+    @Column(columnDefinition = "text")
     private String comentario;
 
     @ManyToOne

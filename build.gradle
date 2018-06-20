@@ -36,6 +36,9 @@ dependencies {
     compile group: 'org.jasypt', name: 'jasypt', version: '1.4.1'
     compile "org.slf4j:slf4j-simple:1.7.21"
 
+    //para enviar json y comunicarse con calquiera
+    compile 'com.google.code.gson:gson:2.6.2'
+
 }
 version '1.0-SNAPSHOT'
 
