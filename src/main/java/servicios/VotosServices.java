@@ -1,6 +1,6 @@
-package Servicios;
+package servicios;
 
-import Modelos.Votos;
+import modelos.Votos;
 import servicios.GestionDb;
 
 import javax.persistence.EntityManager;

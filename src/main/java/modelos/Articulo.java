@@ -24,19 +24,20 @@ public class Articulo {
     @ManyToMany
     private Set<Etiqueta> etiquetas;
 
-    @OneToMany(mappedBy = "articulo", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<Votos> votos;
 
+    public Articulo (){
 
-    public Articulo((String titulo, String cuerpo, Usuario autor, Date fecha, List<Comentario> listaComentarios, Set<Etiqueta> listaEtiquetas, Set<Votos> votos) {
+    }
+    public Articulo(String titulo, String cuerpo, Usuario autor, Date fecha, Set<Comentario> listaComentarios, Set<Etiqueta> listaEtiquetas, Set<Votos> votos) {
         this.titulo = titulo;
         this.cuerpo = cuerpo;
         this.autor = autor;
         this.fecha = fecha;
-        this.listaComentarios = listaComentarios;
-        this.listaEtiquetas = listaEtiquetas;
-        this.votos = votos;) {
-
+        this.comentarios = listaComentarios;
+        this.etiquetas = listaEtiquetas;
+        this.votos = votos;
         }
 
         public long getId() {

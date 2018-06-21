@@ -91,7 +91,9 @@ public class ManejoRutas {
         get("/ver", (request, response)->{
             int id = Integer.parseInt(request.queryParams("id"));
             ArticuloServices as = new ArticuloServices();
+
             Articulo articulo = as.getArticulo((long) id);
+
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("articulo", articulo);
             modelo.put("comentarios", articulo.getComentarios());

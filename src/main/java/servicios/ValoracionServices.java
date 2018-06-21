@@ -16,17 +16,18 @@ import java.util.logging.Logger;
 
 public class ValoracionServices extends GestionDb<Valoracion> {
 
- private static ServicioValoracion instancia;
+
+ private static ValoracionServices instancia;
 
 
  public ValoracionServices() {
   super(Valoracion.class);
  }
-}
 
- public static ServicioValoracion getInstancia() {
+
+ public static ValoracionServices getInstancia() {
   if (instancia == null) {
-   instancia = new ServicioValoracion();
+   instancia = new ValoracionServices();
   }
   return instancia;
  }
@@ -53,7 +54,7 @@ public class ValoracionServices extends GestionDb<Valoracion> {
 
   try {
    Query query = em.createQuery(
-           "from Valoracion valoracion where valoracion.comentario.id = :valoracion_comentarioID and valoracion.valoracion = :valoracion_tipoValoracion"
+           "from Valoracion valoracion where valoracion.comentario.id = :valoracion_comentarioID and valoracion.tipo = :valoracion_tipoValoracion"
    );
 
    query.setParameter("valoracion_comentarioID", comentarioID);

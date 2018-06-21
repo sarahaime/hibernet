@@ -36,8 +36,8 @@ public class Comentario {
         this.autor = autor;
         this.articulo = articulo;
         this.valoraciones = valoraciones;
-
-        public long getCantidadMeGusta () {
+    }
+        public long getCantidadMeGusta() {
             return this.meGusta == null ? 0 : this.meGusta.size();
         }
 
@@ -103,4 +103,3 @@ public class Comentario {
         }
 
     }
-}

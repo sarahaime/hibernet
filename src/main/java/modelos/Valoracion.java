@@ -2,24 +2,22 @@ package modelos;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @Entity
-@Table(name = "valoracion")
 @Access(AccessType.FIELD)
 public class Valoracion {
     @Id
     @GeneratedValue
-    @Column(name = "id")
     private Long id;
-    @Column(name = "tipo")
+
     private boolean tipo;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "usuarioId", unique = true, updatable = false, nullable = false)
+    @JoinColumn( unique = true, updatable = false, nullable = false)
     private Usuario usuario;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "comentarioId", unique = true, updatable = false, nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn( unique = true, updatable = false, nullable = false)
     private Comentario comentario;
 
     public Valoracion() {

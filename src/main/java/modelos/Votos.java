@@ -1,8 +1,10 @@
-package Modelos;
+package modelos;
 
 import javax.persistence.*;
 
 @Entity
+public class Votos{
+
 @Id
 @GeneratedValue
 private long id;
