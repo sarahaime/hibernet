@@ -90,12 +90,13 @@
             </div>
           </div>
           <!-- Pagination -->
+          <input type="hidden" name="pagina" id="pagina" th:value="${pagina}">
           <ul class="pagination justify-content-center mb-4">
             <li class="page-item disabled" id="reciente">
-              <a class="page-link" href="#">&larr; Recientes</a>
+              <a class="page-link" href="#" th:href="|/home?pagina=${pagina}|" id="preciente" >&larr;Recientes</a>
             </li>
             <li class="page-item" id="anterior">
-              <a class="page-link" href="#">Anteriores &rarr;</a>
+              <a class="page-link" href="#" th:href="|/home?pagina=${pagina}|" id="panterior">Anteriores &rarr;</a>
             </li>
           </ul>
         </div>

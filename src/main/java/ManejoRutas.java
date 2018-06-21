@@ -35,9 +35,14 @@ public class ManejoRutas {
             ArticuloServices as = new ArticuloServices();
             Usuario usuario = new Usuario();
             Session session = request.session(true);
-            List<Articulo> listaArticulos = as.listaArticulos();
+
+            int pagina = Integer.parseInt(request.queryParamOrDefault("pagina", "1"));
+            int sz = Integer.parseInt(request.queryParamOrDefault("sz", "5"));
+
+            List<Articulo> listaArticulos = as.listaArticulos(pagina, sz);
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("listaArticulos", listaArticulos);
+            modelo.put("pagina", pagina);
 
             if(request.cookie("usuario") != null){
                 UsuarioServices us = new UsuarioServices();
@@ -106,12 +111,12 @@ public class ManejoRutas {
          * por si no ponen /home
          */
         get("",  (request, response) -> {
-            response.redirect("/home");
+            response.redirect("/home?pagina=1");
             return "";
         });
 
         get("/",  (request, response) -> {
-            response.redirect("/home");
+            response.redirect("/home?pagina=1");
             return "";
         });
 
