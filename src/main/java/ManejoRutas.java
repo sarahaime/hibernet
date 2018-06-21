@@ -195,7 +195,7 @@ public class ManejoRutas {
         });
 
 
-        get("/articulos", (request, response)->{
+        post("/articulos", (request, response)->{
             int sz = Integer.parseInt(request.queryParams("sz"));
             int pagina = Integer.parseInt(request.queryParams("pagina"));
             ArticuloServices as = new ArticuloServices();
@@ -206,6 +206,30 @@ public class ManejoRutas {
 
             return modelo;
         }, jsonTransformer);
+
+        get("/articulosDeEtiqueta", (request, response) -> {
+            ArticuloServices as = new ArticuloServices();
+            Usuario usuario = new Usuario();
+            Session session = request.session(true);
+
+            int etiqueta = Integer.parseInt(request.queryParamOrDefault("etiqueta", "1"));
+
+            List<Articulo> listaArticulos =new ArrayList<>(as.listaArticulosByTag((long)etiqueta));
+            Map<String, Object> modelo = new HashMap<>();
+            modelo.put("listaArticulos", listaArticulos);
+
+            if(request.cookie("usuario") != null){
+                UsuarioServices us = new UsuarioServices();
+                usuario = us.getUsuario(Integer.parseInt(request.cookie("usuario")));
+                session.attribute("usuario", usuario);
+            }
+
+            if(session.attribute("usuario") != null) usuario = session.attribute("usuario");
+
+            modelo.put("registeredUser", usuario);
+
+            return renderThymeleaf(modelo,"/home");
+        });
 
 
 

@@ -13,7 +13,7 @@ public class Etiqueta implements Serializable{
 
     private String etiqueta;
 
-    @ManyToMany(mappedBy = "etiquetas")
+    @ManyToMany(mappedBy = "etiquetas", fetch = FetchType.EAGER)
     private Set<Articulo> articulos;
 
     public Etiqueta(){};
@@ -33,6 +33,7 @@ public class Etiqueta implements Serializable{
     public void setEtiqueta(String etiqueta) {
         this.etiqueta = etiqueta;
     }
+
     public Set<Articulo> getArticulos() {
         return articulos;
     }
@@ -40,5 +41,6 @@ public class Etiqueta implements Serializable{
     public void setArticulos(Set<Articulo> articulos) {
         this.articulos = articulos;
     }
+
 
 }

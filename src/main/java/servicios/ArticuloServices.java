@@ -39,6 +39,15 @@ public class ArticuloServices extends GestionDb<Articulo>{
         return lista;
     }
 
+    public Set<Articulo> listaArticulosByTag(long tagID) {
+        EntityManager em = getEntityManager();
+        Query queryList = em.createQuery("select e from Etiqueta e where e.id =:tagID");
+        queryList.setParameter("tagID", tagID);
+        Etiqueta et = (Etiqueta) queryList.getSingleResult();
+        em.close();
+        return et.getArticulos();
+    }
+
 
     public long getCantidadArticulos(){
         EntityManager em = getEntityManager();

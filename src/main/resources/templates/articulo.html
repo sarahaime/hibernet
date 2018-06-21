@@ -135,7 +135,7 @@
                 <div class="col-lg-6">
                   <ul class="list-unstyled mb-0" th:each="etiqueta:${etiquetas}">
                     <li>
-                      <a href="#" th:text="${etiqueta.etiqueta}">Web Design</a>
+                      <a href="#" th:href="|/articulosDeEtiqueta?etiqueta=${etiqueta.id}|" th:text="${etiqueta.etiqueta}">Web Design</a>
                     </li>
                   </ul>
                 </div>
