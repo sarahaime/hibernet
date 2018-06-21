@@ -11,10 +11,10 @@ public class Comentario {
     @Column(columnDefinition = "text")
     private String comentario;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Usuario autor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Articulo articulo;
 
     public Comentario(){};

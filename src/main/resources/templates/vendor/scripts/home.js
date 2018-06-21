@@ -5,16 +5,9 @@
 var paginaActual = $('#pagina').val();
 
 
-
 $('#panterior').on('click', function () {
-    paginaActual--;
+    paginaActual++;
 
-    if( paginaActual < 1 ) {
-        $('#anterior').prop('disabled', true);
-        paginaActual= 1;
-    }else{
-        $('#anterior').prop('disabled', false);
-    }
 
     cargarArticuloPorPagina(paginaActual);
 });
@@ -29,12 +22,22 @@ function cargarArticuloPorPagina() {
 
     $('#pagina').val(paginaActual);
 
+    window.location.href = "/home?pagina="+paginaActual;
+
     console.log(paginaActual);
-    if( paginaActual > 100 ) {
-        $('#reciente').prop('disabled', true);
+    // if( paginaActual > total ) {
+    //     $('#reciente').prop('disabled', true);
+    // }else{
+    //     $('#reciente').prop('disabled', false);
+    // }
+
+    if( paginaActual < 1 ) {
+        //  $('#anterior').prop('disabled', true);
+        paginaActual= 1;
     }else{
-        $('#reciente').prop('disabled', false);
+        //$('#anterior').prop('disabled', false);
     }
+
 
 }
 

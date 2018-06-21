@@ -24,10 +24,10 @@ public class Articulo {
     private Usuario autor;
 
     //para que incluya los comentarios sin problemas
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Comentario> comentarios;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Etiqueta> etiquetas;
 
     public Articulo() {

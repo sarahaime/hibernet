@@ -48,6 +48,7 @@ public class EtiquetaServices extends GestionDb<Etiqueta>{
 
     //si no existe la etiqueta, la crea y la busca,
     //podria tener problemas de concurrencia pera para este caso es OK
+
      public Etiqueta getEtiquetaByName(String name){
          Etiqueta etiqueta = null;
 

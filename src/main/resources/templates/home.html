@@ -15,9 +15,6 @@
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/blog-home.css" rel="stylesheet">
-
-    <script src="scripts/home.js"></script>
-
   </head>
 
   <body>
@@ -92,11 +89,11 @@
           <!-- Pagination -->
           <input type="hidden" name="pagina" id="pagina" th:value="${pagina}">
           <ul class="pagination justify-content-center mb-4">
-            <li class="page-item disabled" id="reciente">
-              <a class="page-link" href="#" th:href="|/home?pagina=${pagina}|" id="preciente" >&larr;Recientes</a>
+            <li class="page-item" id="reciente">
+              <botton class="page-link" id="preciente" >&larr;Recientes</botton>
             </li>
             <li class="page-item" id="anterior">
-              <a class="page-link" href="#" th:href="|/home?pagina=${pagina}|" id="panterior">Anteriores &rarr;</a>
+              <botton class="page-link" id="panterior">Anteriores &rarr;</botton>
             </li>
           </ul>
         </div>
@@ -165,6 +162,8 @@
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+
+  <script src="vendor/scripts/home.js"></script>
 
   </body>
 

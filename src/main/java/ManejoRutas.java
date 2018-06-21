@@ -6,6 +6,7 @@ import servicios.ArticuloServices;
 import servicios.ComentarioServices;
 import servicios.UsuarioServices;
 
+import static java.lang.Math.max;
 import static spark.Spark.*;
 
 import spark.*;
@@ -38,7 +39,7 @@ public class ManejoRutas {
 
             int pagina = Integer.parseInt(request.queryParamOrDefault("pagina", "1"));
             int sz = Integer.parseInt(request.queryParamOrDefault("sz", "5"));
-
+            pagina = max(pagina,1);
             List<Articulo> listaArticulos = as.listaArticulos(pagina, sz);
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("listaArticulos", listaArticulos);
@@ -127,8 +128,10 @@ public class ManejoRutas {
             Session session = request.session(true);
             int id = Integer.parseInt(request.queryParams("articuloid"));
             int usuarioid = (int)( (Usuario)session.attribute("usuario")).getId();
+
             cs.crearComentario(request.queryParams("comentario"), (long)usuarioid, (long)id);
             response.redirect("/ver?id="+id);
+
             return "";
         });
 
