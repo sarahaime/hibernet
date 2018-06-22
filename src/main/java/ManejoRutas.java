@@ -4,6 +4,7 @@ import modelos.Etiqueta;
 import modelos.Usuario;
 import servicios.ArticuloServices;
 import servicios.ComentarioServices;
+import servicios.EtiquetaServices;
 import servicios.UsuarioServices;
 
 import static java.lang.Math.max;
@@ -44,6 +45,7 @@ public class ManejoRutas {
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("listaArticulos", listaArticulos);
             modelo.put("pagina", pagina);
+            modelo.put("etiquetas", new EtiquetaServices().getEtiquetas());
 
             if(request.cookie("usuario") != null){
                 UsuarioServices us = new UsuarioServices();
@@ -194,19 +196,6 @@ public class ManejoRutas {
             return "";
         });
 
-
-        post("/articulos", (request, response)->{
-            int sz = Integer.parseInt(request.queryParams("sz"));
-            int pagina = Integer.parseInt(request.queryParams("pagina"));
-            ArticuloServices as = new ArticuloServices();
-            Map<String, Object> modelo = new HashMap<>();
-
-            modelo.put("articulos", as.listaArticulos(pagina, sz));
-            modelo.put("cantidad", as.getCantidadArticulos());
-
-            return modelo;
-        }, jsonTransformer);
-
         get("/articulosDeEtiqueta", (request, response) -> {
             ArticuloServices as = new ArticuloServices();
             Usuario usuario = new Usuario();
@@ -217,6 +206,7 @@ public class ManejoRutas {
             List<Articulo> listaArticulos =new ArrayList<>(as.listaArticulosByTag((long)etiqueta));
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("listaArticulos", listaArticulos);
+            modelo.put("etiquetas", new EtiquetaServices().getEtiquetas());
 
             if(request.cookie("usuario") != null){
                 UsuarioServices us = new UsuarioServices();

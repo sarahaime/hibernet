@@ -10,6 +10,7 @@
         <class>modelos.Articulo</class>
         <class>modelos.Etiqueta</class>
         <class>modelos.Valoracion</class>
+        <class>modelos.Votos</class>
 
         <properties>
             <!--<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test" />-->

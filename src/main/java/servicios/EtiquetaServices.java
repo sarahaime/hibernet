@@ -69,4 +69,13 @@ public class EtiquetaServices extends GestionDb<Etiqueta>{
         return etiqueta;
     }
 
+    public List<Etiqueta> getEtiquetas( ){
+        Etiqueta etiqueta = null;
+        EntityManager em = getEntityManager();
+        Query query = em.createQuery("select e from Etiqueta e");
+        List<Etiqueta> lista = query.getResultList();
+        em.close();
+        return lista;
+    }
+
 }

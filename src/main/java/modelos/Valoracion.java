@@ -14,19 +14,21 @@ public class Valoracion {
     @Column(name = "tipo")
     private boolean tipo;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "usuarioId", unique = true, updatable = false, nullable = false)
+    @JoinColumn(name = "usuario_id", unique = true, updatable = false, nullable = false)
     private Usuario usuario;
+
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "articuloId", unique = true, updatable = false, nullable = false)
-    private Articulo articulo;
+    @JoinColumn(name = "comentario_id", unique = true, updatable = false, nullable = false)
+    private Comentario comentario;
 
     public Valoracion() {
     }
 
-    public Valoracion(boolean tipo, Usuario usuario, Articulo articulo) {
+    public Valoracion(boolean tipo, Usuario usuario, Comentario comentario) {
         this.tipo = tipo;
         this.usuario = usuario;
-        this.articulo = articulo;
+        this.comentario = comentario;
     }
 
     public Long getId() {
@@ -53,11 +55,11 @@ public class Valoracion {
         this.usuario = usuario;
     }
 
-    public Articulo getArticulo() {
-        return articulo;
+    public Comentario getComentario() {
+        return comentario;
     }
 
-    public void setArticulo(Articulo articulo) {
-        this.articulo = articulo;
+    public void setComentario(Comentario comentario) {
+        this.comentario = comentario;
     }
 }

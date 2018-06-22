@@ -30,9 +30,22 @@ public class Articulo {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Etiqueta> etiquetas;
 
-    public Articulo() {
+    @OneToMany(mappedBy = "articulo", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private Set<Votos> votos;
 
+
+    public Articulo() { }
+
+    public Articulo(String titulo, String cuerpo, Usuario autor, Date fecha, Set<Comentario> comentarios, Set<Etiqueta> etiquetas, Set<Votos> votos) {
+        this.titulo = titulo;
+        this.cuerpo = cuerpo;
+        this.autor = autor;
+        this.fecha = fecha;
+        this.comentarios = comentarios;
+        this.etiquetas = etiquetas;
+        this.votos = votos;
     }
+
 
     public long getId() {
         return id;
@@ -93,4 +106,13 @@ public class Articulo {
     public void agregarEtiqueta(Etiqueta e){
         etiquetas.add(e);
     }
+
+    public Set<Votos> getVotos() {
+        return votos;
+    }
+
+    public void setVotos(Set<Votos> votos) {
+        this.votos = votos;
+    }
+
 }

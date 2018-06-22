@@ -69,7 +69,7 @@
           <!-- Author -->
           <p class="lead">
             Por:
-            <a href="#" th:text="${autor}">Sarahaimep</a>
+            <a href="#" th:text="${autor}">Sarahaime</a>
           </p>
 
           <hr>
@@ -84,32 +84,94 @@
 
           <hr>
 
-          <!-- Comments Form -->
-          <div class="card my-4">
-            <h5 class="card-header">Dejar comentario:</h5>
-            <div class="card-body">
-              <form method="post" action="/comentar">
-                <div class="form-group">
-                  <textarea class="form-control" rows="3" name="comentario"></textarea>
-                </div>
-                  <input type="hidden" name="articuloid" th:value="${articulo.id}">
-                <button type="submit" class="btn btn-primary">Enviar</button>
-              </form>
+
+          <h5>
+            <strong><i class="fas fa-eye"></i> REACCIONES</strong>
+            <hr noshade>
+          </h5>
+          <form action="/articulo/${articulo.id}/votar" method="post">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="voto" value="Me gusta">
+              <label class="form-check-label" for="me-gusta">
+                <i id="me-gusta" class="fas fa-thumbs-up fa-2x" style="color: #0099ff" title="Me gusta"></i>
+                <span class="badge badge-secondary">${votosMeGusta}</span>
+              </label>
             </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="voto" value="Me disgusta">
+              <label class="form-check-label" for="me-disgusta">
+                <i id="me-disgusta" class="fas fa-frown fa-2x" style="color: red" title="Me disgusta"></i>
+                <span class="badge badge-secondary">${votosMeDisgusta}</span>
+              </label>
+            </div>
+            <button type="submit" class="btn btn-outline-dark">Reaccionar</button>
+            <br>
+            <div th:if="${votoActual}">
+            <p class="mb-0"><strong>Has votado por:</strong> ${votoActual.voto}.</p>
+            </div>
+            <div th:unless="${votoActual}" style="color:red">
+            *Aún no has dejado tu voto en este artículo.
+            </div>
+          </form>
+
+      <!-- Comments Form -->
+      <div class="card md-4">
+        <h5 class="card-header">Dejar comentario:</h5>
+        <div class="card-body">
+          <form method="post" action="/comentar">
+            <div class="form-group">
+              <textarea class="form-control" rows="3" name="comentario"></textarea>
+            </div>
+            <input type="hidden" name="articuloid" th:value="${articulo.id}">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+          </form>
+        </div>
+      </div>
+
+
+      <div  th:each="comentario:${comentarios}">
+        <div class="media mb-4">
+          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+          <div class="media-body">
+            <h5 class="mt-0" th:text="${comentario.autor.nombre}">Commenter Name</h5>
+            <p th:text="${comentario.comentario}"> </p>
           </div>
 
-          <!-- Comments -->
-            <div  th:each="comentario:${comentarios}">
-              <div class="media mb-4">
-                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                <div class="media-body">
-                  <h5 class="mt-0" th:text="${comentario.autor.nombre}">Commenter Name</h5>
-                    <p th:text="${comentario.comentario}"> </p>
-                </div>
+          <div>
+            <form action="/articulo/${comentario.id}/valorar" method="post"
+                  class="mx-auto pb-3 pl-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="valoracion" value="Me gusta">
+                <label class="form-check-label" for="me-gusta">
+                  <i class="fas fa-thumbs-up fa-2x" style="color: #0099ff"
+                     title="Me gusta"></i>
+                  <span class="badge badge-secondary">${comentario.cantidadMeGusta}</span>
+                </label>
               </div>
-            </div>
+
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="valoracion"
+                       value="Me disgusta">
+                <label class="form-check-label" for="me-disgusta">
+                  <i class="fas fa-frown fa-2x" style="color: red" title="Me disgusta"></i>
+                  <span class="badge badge-secondary">${comentario.cantidadMeDisgusta}</span>
+                </label>
+              </div>
+              <button type="submit" class="btn btn-outline-dark">Reaccionar</button>
+            </form>
+          </div>
 
         </div>
+      </div>
+
+
+          <br>
+          <br>
+
+
+
+    </div>
 
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">
