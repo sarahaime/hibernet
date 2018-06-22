@@ -1,19 +1,20 @@
 package modelos;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-public class Etiqueta {
+public class Etiqueta implements Serializable{
 
     @Id
     @GeneratedValue
     private long id;
 
-    @Column(unique = true)
     private String etiqueta;
+
+    @ManyToMany(mappedBy = "etiquetas", fetch = FetchType.EAGER)
+    private Set<Articulo> articulos;
 
     public Etiqueta(){};
 
@@ -32,5 +33,14 @@ public class Etiqueta {
     public void setEtiqueta(String etiqueta) {
         this.etiqueta = etiqueta;
     }
+
+    public Set<Articulo> getArticulos() {
+        return articulos;
+    }
+
+    public void setArticulos(Set<Articulo> articulos) {
+        this.articulos = articulos;
+    }
+
 
 }

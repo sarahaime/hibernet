@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class ArticuloServices extends GestionDb<Articulo>{
@@ -28,17 +29,23 @@ public class ArticuloServices extends GestionDb<Articulo>{
     }
 
     public List<Articulo> listaArticulos(int pagina, int sz) {
+        pagina = max(pagina,1);
         EntityManager em = getEntityManager();
         Query queryList = em.createQuery("select a from Articulo a order by a.id desc");
-
-        /****paginacion****/
         queryList.setFirstResult((pagina-1)*sz);
         queryList.setMaxResults(sz);
-
         List<Articulo> lista = queryList.getResultList();
-
         em.close();
         return lista;
+    }
+
+    public Set<Articulo> listaArticulosByTag(long tagID) {
+        EntityManager em = getEntityManager();
+        Query queryList = em.createQuery("select e from Etiqueta e where e.id =:tagID");
+        queryList.setParameter("tagID", tagID);
+        Etiqueta et = (Etiqueta) queryList.getSingleResult();
+        em.close();
+        return et.getArticulos();
     }
 
 
@@ -52,12 +59,14 @@ public class ArticuloServices extends GestionDb<Articulo>{
 
 
     public Articulo getArticulo(long id) {
-        return find(id);
+        Articulo articulo = find(id);
+        articulo.setComentarios( new ComentarioServices().getComentarioByArticuloID(id));
+        return articulo;
     }
 
     public boolean crearArticulo(String titulo, String cuerpo, long usuarioid, String tags){
         Articulo articulo = new Articulo();
-        articulo.setAutor( new UsuarioServices().find(usuarioid) );
+        articulo.setAutor( new UsuarioServices().getUsuario(usuarioid) );
         articulo.setTitulo(titulo);
         articulo.setCuerpo(cuerpo);
         articulo.setEtiquetas(generarEtiquetas(tags));
@@ -73,97 +82,13 @@ public class ArticuloServices extends GestionDb<Articulo>{
         articulo.setCuerpo(cuerpo);
         articulo.setEtiquetas(generarEtiquetas(tags));
         crear(articulo);
-
         return true;
     }
 
-    /***************************************FALTA*************************************/
     //Metodo borrar los Articulos
     public boolean borrarArticulo(long id, long usuarioid){
-        boolean ok =false;
-
-        Connection con = null;
-        try {
-            //que sea quien lo creo, o un administrador
-            String query = "delete from Articulo where id = ? and (USUARIOID = ? or exists (select* from USUARIO where id = ? and administrador)) ";
-            con = DB.getInstancia().getConexion();
-            //
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-
-            //Indica el where...
-            prepareStatement.setLong(1, id);
-            prepareStatement.setLong(2, usuarioid);
-            prepareStatement.setLong(3, usuarioid);
-            //
-            int fila = prepareStatement.executeUpdate();
-            ok = fila > 0 ;
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return ok;
-    }
-
-    private boolean agregarTags(long articuloid, String tags){
-        boolean ok =false;
-
-        List<String> tagsList = Arrays.asList(tags.split(",[ ]*"));
-
-        Connection con = null;
-        try {
-            //que sea quien lo creo, o un administrador
-            String query = "delete from ETIQUETA " +
-                    " where ARTICULOID = ?";
-            con = DB.getInstancia().getConexion();
-
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-
-            //Indica el where...
-            prepareStatement.setLong(1, articuloid);
-
-            int fila = prepareStatement.executeUpdate();
-            ok = fila > 0 ;
-            List<String> ets = new ArrayList<String>();
-            for(String etiqueta : tagsList) {
-               boolean enLista = false;
-               for(String  et : ets){
-                   if( et.equalsIgnoreCase(etiqueta)  ){
-                       enLista = true;
-                   }
-               }
-               if(!enLista) ets.add( etiqueta );
-            }
-
-            for(String etiqueta : ets) {
-                query = "insert into ETIQUETA(ARTICULOID, ETIQUETA) values(?,?)";
-                prepareStatement = con.prepareStatement(query);
-                //Antes de ejecutar seteo los parametros
-                prepareStatement.setLong(1, articuloid);
-                prepareStatement.setString(2, etiqueta.toUpperCase());
-                prepareStatement.executeUpdate();
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return ok;
-
-
-
+        eliminar(id);
+        return true;
     }
 
     private Set<Etiqueta>generarEtiquetas(String etiquetas){

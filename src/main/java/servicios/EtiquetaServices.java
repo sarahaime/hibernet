@@ -48,6 +48,7 @@ public class EtiquetaServices extends GestionDb<Etiqueta>{
 
     //si no existe la etiqueta, la crea y la busca,
     //podria tener problemas de concurrencia pera para este caso es OK
+
      public Etiqueta getEtiquetaByName(String name){
          Etiqueta etiqueta = null;
 
@@ -66,6 +67,15 @@ public class EtiquetaServices extends GestionDb<Etiqueta>{
              return getEtiquetaByName(name);
          }
         return etiqueta;
+    }
+
+    public List<Etiqueta> getEtiquetas( ){
+        Etiqueta etiqueta = null;
+        EntityManager em = getEntityManager();
+        Query query = em.createQuery("select e from Etiqueta e");
+        List<Etiqueta> lista = query.getResultList();
+        em.close();
+        return lista;
     }
 
 }

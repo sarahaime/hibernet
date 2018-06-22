@@ -1,8 +1,6 @@
 package modelos;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @Entity
@@ -16,10 +14,12 @@ public class Valoracion {
     @Column(name = "tipo")
     private boolean tipo;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "usuarioId", unique = true, updatable = false, nullable = false)
+    @JoinColumn(name = "usuario_id", unique = true, updatable = false, nullable = false)
     private Usuario usuario;
+
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "comentarioId", unique = true, updatable = false, nullable = false)
+    @JoinColumn(name = "comentario_id", unique = true, updatable = false, nullable = false)
     private Comentario comentario;
 
     public Valoracion() {

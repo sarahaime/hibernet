@@ -1,33 +1,24 @@
-package Servicios;
+package servicios;
 
-import Modelos.Votos;
-import servicios.GestionDb;
+import modelos.Votos;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
 public class VotosServices extends GestionDb<Votos> {
-    private static VotosServices instancia;
 
     private VotosServices() {
         super(Votos.class);
     }
 
-    public static VotosServices getInstancia() {
-        if (instancia == null) {
-            instancia = new VotosServices();
-        }
 
-        return instancia;
-    }
-
-    public Object encontrarVotoUsuarioEnArticulo(long articuloID, long usuarioID) {
+    public Object getVotoUsuarioEnArticulo(long articuloID, long usuarioID) {
         EntityManager em = getEntityManager();
 
         try {
             Query query = em.createQuery(
-                    "from Votos votos where votos.articulo.id = :votos_articuloID and votos.usuario.id = :votos_usuarioID"
+                    "select votos from Votos votos where votos.articulo.id = :votos_articuloID and votos.usuario.id = :votos_usuarioID"
             );
 
             query.setParameter("votos_articuloID", articuloID);
@@ -40,16 +31,16 @@ public class VotosServices extends GestionDb<Votos> {
         }
     }
 
-    public List<Votos> encontrarVotosPorArticulo(long articuloID, String tipoVotos) {
+    public List<Votos> getVotosPorArticulo(long articuloID, String tipoVotos) {
         EntityManager em = getEntityManager();
 
         try {
             Query query = em.createQuery(
-                    "from Votos votos where votos.articulo.id = :votos_articuloID and votos.votos = :votos_tipoVotos"
+                    "select votos from Votos votos where votos.articulo.id = :varticuloID and votos.votos = :tipoVotos"
             );
 
-            query.setParameter("votos_articuloID", articuloID);
-            query.setParameter("votos_tipoVotos", tipoVotos);
+            query.setParameter("articuloID", articuloID);
+            query.setParameter("tipoVotos", tipoVotos);
             return query.getResultList();
         } catch (Exception ex) {
             return null;
@@ -58,3 +49,5 @@ public class VotosServices extends GestionDb<Votos> {
         }
     }
 }
+
+

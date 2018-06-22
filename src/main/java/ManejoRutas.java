@@ -4,8 +4,10 @@ import modelos.Etiqueta;
 import modelos.Usuario;
 import servicios.ArticuloServices;
 import servicios.ComentarioServices;
+import servicios.EtiquetaServices;
 import servicios.UsuarioServices;
 
+import static java.lang.Math.max;
 import static spark.Spark.*;
 
 import spark.*;
@@ -35,9 +37,15 @@ public class ManejoRutas {
             ArticuloServices as = new ArticuloServices();
             Usuario usuario = new Usuario();
             Session session = request.session(true);
-            List<Articulo> listaArticulos = as.listaArticulos();
+
+            int pagina = Integer.parseInt(request.queryParamOrDefault("pagina", "1"));
+            int sz = Integer.parseInt(request.queryParamOrDefault("sz", "5"));
+            pagina = max(pagina,1);
+            List<Articulo> listaArticulos = as.listaArticulos(pagina, sz);
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("listaArticulos", listaArticulos);
+            modelo.put("pagina", pagina);
+            modelo.put("etiquetas", new EtiquetaServices().getEtiquetas());
 
             if(request.cookie("usuario") != null){
                 UsuarioServices us = new UsuarioServices();
@@ -106,12 +114,12 @@ public class ManejoRutas {
          * por si no ponen /home
          */
         get("",  (request, response) -> {
-            response.redirect("/home");
+            response.redirect("/home?pagina=1");
             return "";
         });
 
         get("/",  (request, response) -> {
-            response.redirect("/home");
+            response.redirect("/home?pagina=1");
             return "";
         });
 
@@ -122,8 +130,10 @@ public class ManejoRutas {
             Session session = request.session(true);
             int id = Integer.parseInt(request.queryParams("articuloid"));
             int usuarioid = (int)( (Usuario)session.attribute("usuario")).getId();
+
             cs.crearComentario(request.queryParams("comentario"), (long)usuarioid, (long)id);
             response.redirect("/ver?id="+id);
+
             return "";
         });
 
@@ -186,18 +196,30 @@ public class ManejoRutas {
             return "";
         });
 
-
-        get("/articulos", (request, response)->{
-            int sz = Integer.parseInt(request.queryParams("sz"));
-            int pagina = Integer.parseInt(request.queryParams("pagina"));
+        get("/articulosDeEtiqueta", (request, response) -> {
             ArticuloServices as = new ArticuloServices();
+            Usuario usuario = new Usuario();
+            Session session = request.session(true);
+
+            int etiqueta = Integer.parseInt(request.queryParamOrDefault("etiqueta", "1"));
+
+            List<Articulo> listaArticulos =new ArrayList<>(as.listaArticulosByTag((long)etiqueta));
             Map<String, Object> modelo = new HashMap<>();
+            modelo.put("listaArticulos", listaArticulos);
+            modelo.put("etiquetas", new EtiquetaServices().getEtiquetas());
 
-            modelo.put("articulos", as.listaArticulos(pagina, sz));
-            modelo.put("cantidad", as.getCantidadArticulos());
+            if(request.cookie("usuario") != null){
+                UsuarioServices us = new UsuarioServices();
+                usuario = us.getUsuario(Integer.parseInt(request.cookie("usuario")));
+                session.attribute("usuario", usuario);
+            }
 
-            return modelo;
-        }, jsonTransformer);
+            if(session.attribute("usuario") != null) usuario = session.attribute("usuario");
+
+            modelo.put("registeredUser", usuario);
+
+            return renderThymeleaf(modelo,"/home");
+        });
 
 
 

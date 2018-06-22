@@ -2,22 +2,17 @@
 "use strict";
 
 
-var paginaActual = 0;
+var paginaActual = $('#pagina').val();
 
 
-$('#anterior').on('click', function () {
-    paginaActual--;
+$('#panterior').on('click', function () {
+    paginaActual++;
 
-    if( paginaActual < 1 ) {
-        $('#anterior').prop('disabled', true);
-    }else{
-        $('#anterior').prop('disabled', false);
-    }
 
     cargarArticuloPorPagina(paginaActual);
 });
 
-$('#reciente').on('click', function () {
+$('#preciente').on('click', function () {
     paginaActual--;
     cargarArticuloPorPagina(paginaActual);
 });
@@ -25,11 +20,24 @@ $('#reciente').on('click', function () {
 function cargarArticuloPorPagina() {
 //https://stackoverflow.com/questions/22037062/how-can-we-repeat-the-table-row-in-jquery-like-angularjs-does-with-ng-repeat/22039804
 
-    if( paginaActual > 100 ) {
-        $('#reciente').prop('disabled', true);
+    $('#pagina').val(paginaActual);
+
+    window.location.href = "/home?pagina="+paginaActual;
+
+    console.log(paginaActual);
+    // if( paginaActual > total ) {
+    //     $('#reciente').prop('disabled', true);
+    // }else{
+    //     $('#reciente').prop('disabled', false);
+    // }
+
+    if( paginaActual < 1 ) {
+        //  $('#anterior').prop('disabled', true);
+        paginaActual= 1;
     }else{
-        $('#reciente').prop('disabled', false);
+        //$('#anterior').prop('disabled', false);
     }
+
 
 }
 

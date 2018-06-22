@@ -31,8 +31,8 @@ public class UsuarioServices extends GestionDb<Usuario>{
         return lista;
     }
 
-    public static Usuario getUsuario(long id) {
-        Usuario usuario =  new UsuarioServices().find(id);
+    public Usuario getUsuario(long id) {
+        Usuario usuario =  find(id);
         return usuario;
     }
 
