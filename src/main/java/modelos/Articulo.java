@@ -1,6 +1,7 @@
 package modelos;
 
 import org.hibernate.annotations.CreationTimestamp;
+import servicios.LikeArticuloServices;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -30,21 +31,38 @@ public class Articulo {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Etiqueta> etiquetas;
 
-    @OneToMany(mappedBy = "articulo", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    private Set<Votos> votos;
+    //campos que son computados
+    @Transient
+    private int likesCount;
 
+    @Transient
+    private int dislikesCount;
+
+
+
+    //todo: estas son las funciones para que el articulo traiga los likes dislikes
+    public int getLikesCount() {
+        return LikeArticuloServices.getInstancia().getLikesByArticuloID(id, 1);
+    }
+
+    public int getDislikesCount() {
+        return LikeArticuloServices.getInstancia().getLikesByArticuloID(id, 2);
+    }
 
     public Articulo() { }
 
-    public Articulo(String titulo, String cuerpo, Usuario autor, Date fecha, Set<Comentario> comentarios, Set<Etiqueta> etiquetas, Set<Votos> votos) {
+    public Articulo(String titulo, String cuerpo, Usuario autor, Date fecha, Set<Comentario> comentarios, Set<Etiqueta> etiquetas) {
         this.titulo = titulo;
         this.cuerpo = cuerpo;
         this.autor = autor;
         this.fecha = fecha;
         this.comentarios = comentarios;
         this.etiquetas = etiquetas;
-        this.votos = votos;
     }
+
+
+
+
 
 
     public long getId() {
@@ -105,14 +123,6 @@ public class Articulo {
 
     public void agregarEtiqueta(Etiqueta e){
         etiquetas.add(e);
-    }
-
-    public Set<Votos> getVotos() {
-        return votos;
-    }
-
-    public void setVotos(Set<Votos> votos) {
-        this.votos = votos;
     }
 
 }

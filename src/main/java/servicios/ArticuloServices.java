@@ -103,36 +103,4 @@ public class ArticuloServices extends GestionDb<Articulo>{
 
         return ans;
     }
-
-/*
-    public boolean borrarArticulo(int id){
-        boolean ok =false;
-
-        Connection con = null;
-        try {
-
-            String query = "delete from Articulo where id = ?";
-            con = DB.getInstancia().getConexion();
-            //
-            PreparedStatement prepareStatement = con.prepareStatement(query);
-
-            //Indica el where...
-            prepareStatement.setInt(1, id);
-            //
-            int fila = prepareStatement.executeUpdate();
-            ok = fila > 0 ;
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ArticuloServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return ok;
-    }*/
-
 }

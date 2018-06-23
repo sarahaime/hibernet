@@ -23,9 +23,7 @@ dependencies {
     compile 'org.hibernate:hibernate-core:5.1.0.Final'
     compile 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
 
-
     compile "com.sparkjava:spark-template-thymeleaf:2.5.5"
-
     //Libreria Spark
     compile "com.sparkjava:spark-core:2.7.2"
     compile 'com.h2database:h2:1.4.191'

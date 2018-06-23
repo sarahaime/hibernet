@@ -1,7 +1,9 @@
 package modelos;
 
+import servicios.LikeArticuloServices;
+
 import javax.persistence.*;
-import java.util.List;
+
 import java.util.Set;
 
 @Entity
@@ -19,25 +21,31 @@ public class Comentario {
     @ManyToOne(fetch = FetchType.EAGER)
     private Articulo articulo;
 
-    @OneToMany(mappedBy = "comentario", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    private Set<Valoracion> valoraciones;
+    @Transient
+    private int likesCount;
 
     @Transient
-    private List<Valoracion> meGusta;
+    private int dislikesCount;
 
-    @Transient
-    private List<Valoracion> meDisgusta;
+    //todo: cambiar aqui para que traiga la cuenta de likes
+    public int getLikesCount() {
+        return likesCount;
+    }
+
+
+    //todo: cambiar aqui para que traiga la cuenta de no likes
+    public int getDislikesCount() {
+
+        return 5;
+    }
+
+
+
 
 
     public Comentario(){};
-    public Comentario(String comentario, Usuario autor, Articulo articulo, Set<Valoracion> valoraciones) {
-        this.comentario = comentario;
-        this.autor = autor;
-        this.articulo = articulo;
-        this.valoraciones = valoraciones;
-    }
 
-        public long getId() {
+    public long getId() {
         return id;
     }
 
@@ -69,36 +77,5 @@ public class Comentario {
         this.articulo = articulo;
     }
 
-    public long getCantidadMeGusta () {
-        return this.meGusta == null ? 0 : this.meGusta.size();
-    }
-
-    public long getCantidadMeDisgusta () {
-        return this.meDisgusta == null ? 0 : this.meDisgusta.size();
-    }
-
-    public List<Valoracion> getMeGusta () {
-        return meGusta;
-    }
-
-    public void setMeGusta (List < Valoracion > meGusta) {
-        this.meGusta = meGusta;
-    }
-
-    public List<Valoracion> getMeDisgusta () {
-        return meDisgusta;
-    }
-
-    public void setMeDisgusta (List < Valoracion > meDisgusta) {
-        this.meDisgusta = meDisgusta;
-    }
-
-    public Set<Valoracion> getValoraciones () {
-        return valoraciones;
-    }
-
-    public void setValoraciones (Set < Valoracion > valoraciones) {
-        this.valoraciones = valoraciones;
-    }
 
 }

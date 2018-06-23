@@ -94,7 +94,7 @@
               <input class="form-check-input" type="radio" name="voto" value="Me gusta">
               <label class="form-check-label" for="me-gusta">
                 <i id="me-gusta" class="fas fa-thumbs-up fa-2x" style="color: #0099ff" title="Me gusta"></i>
-                <span class="badge badge-secondary">${votosMeGusta}</span>
+                <span class="badge badge-secondary">${articulo.likesCount}</span>
               </label>
             </div>
 
@@ -102,7 +102,7 @@
               <input class="form-check-input" type="radio" name="voto" value="Me disgusta">
               <label class="form-check-label" for="me-disgusta">
                 <i id="me-disgusta" class="fas fa-frown fa-2x" style="color: red" title="Me disgusta"></i>
-                <span class="badge badge-secondary">${votosMeDisgusta}</span>
+                <span class="badge badge-secondary">${articulo.dislikesCount}</span>
               </label>
             </div>
             <button type="submit" class="btn btn-outline-dark">Reaccionar</button>
@@ -146,7 +146,7 @@
                 <label class="form-check-label" for="me-gusta">
                   <i class="fas fa-thumbs-up fa-2x" style="color: #0099ff"
                      title="Me gusta"></i>
-                  <span class="badge badge-secondary">${comentario.cantidadMeGusta}</span>
+                  <span class="badge badge-secondary">${comentario.likesCount}</span>
                 </label>
               </div>
 
@@ -155,7 +155,7 @@
                        value="Me disgusta">
                 <label class="form-check-label" for="me-disgusta">
                   <i class="fas fa-frown fa-2x" style="color: red" title="Me disgusta"></i>
-                  <span class="badge badge-secondary">${comentario.cantidadMeDisgusta}</span>
+                  <span class="badge badge-secondary">${comentario.dislikesCount}</span>
                 </label>
               </div>
               <button type="submit" class="btn btn-outline-dark">Reaccionar</button>
