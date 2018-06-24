@@ -224,6 +224,26 @@ public class ManejoRutas {
 
 
     }
+    
+    //ruta para el conteo de los likes
+        post("/articulo/${id}/votar", (request, response) -> {
+            String id = request.params("id");
+
+            ArticuloServices as = new ArticuloServices();
+            Articulo articulo = as.getArticulo(Long.parseLong(id));
+
+            //aqui true se refiere a me gusta
+            if (request.queryMap().get("voto").value().equals("true")) {
+                articulo.setLikesCount(articulo.getLikesCount() + 1);
+            } else {
+                articulo.setDislikesCount(articulo.getDislikesCount() + 1);
+            }
+
+            response.redirect("/articulo/" + id);
+
+            return null;
+        });
+    }
 
     private static Object procesarParametros(Request request, Response response){
       //  System.out.println("Recibiendo mensaje por el metodo: "+request.requestMethod());
