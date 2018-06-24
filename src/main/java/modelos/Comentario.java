@@ -27,22 +27,6 @@ public class Comentario {
     @Transient
     private int dislikesCount;
 
-    //todo: cambiar aqui para que traiga la cuenta de likes
-    public int getLikesCount() {
-        return likesCount;
-    }
-
-
-    //todo: cambiar aqui para que traiga la cuenta de no likes
-    public int getDislikesCount() {
-
-        return 5;
-    }
-
-
-
-
-
     public Comentario(){};
 
     public long getId() {
@@ -77,5 +61,20 @@ public class Comentario {
         this.articulo = articulo;
     }
 
+  public int getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
+    }
+
+    public int getDislikesCount() {
+        return dislikesCount;
+    }
+
+    public void setDislikesCount(int dislikesCount) {
+        this.dislikesCount = dislikesCount;
+    }
 
 }
