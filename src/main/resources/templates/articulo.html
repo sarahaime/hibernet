@@ -91,16 +91,16 @@
           </h5>
           <form action="/articulo/${articulo.id}/votar" method="post">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="voto" value="Me gusta">
-              <label class="form-check-label" for="me-gusta">
+              <input class="form-check-input" type="radio" name="voto" value="true">
+              <label class="form-check-label" for="me-gusta"> Me gusta
                 <i id="me-gusta" class="fas fa-thumbs-up fa-2x" style="color: #0099ff" title="Me gusta"></i>
                 <span class="badge badge-secondary">${articulo.likesCount}</span>
               </label>
             </div>
 
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="voto" value="Me disgusta">
-              <label class="form-check-label" for="me-disgusta">
+              <input class="form-check-input" type="radio" name="voto" value="false">
+              <label class="form-check-label" for="me-disgusta"> Me disgusta
                 <i id="me-disgusta" class="fas fa-frown fa-2x" style="color: red" title="Me disgusta"></i>
                 <span class="badge badge-secondary">${articulo.dislikesCount}</span>
               </label>
