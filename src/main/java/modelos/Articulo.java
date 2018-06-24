@@ -124,5 +124,12 @@ public class Articulo {
     public void agregarEtiqueta(Etiqueta e){
         etiquetas.add(e);
     }
+    
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
+    }
 
+    public void setDislikesCount(int dislikesCount) {
+        this.dislikesCount = dislikesCount;
+    }
 }
