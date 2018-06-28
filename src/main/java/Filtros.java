@@ -43,6 +43,15 @@ public class Filtros { //para aplicar filtros
             }
         });
 
+        before("/articulo/votar",(request, response) -> {
+            Usuario usuario = request.session(true).attribute("usuario");
+            if(usuario==null){
+                //parada del request, enviando un codigo.
+                response.redirect("/login");
+                halt(401, "No tiene permisos para acceder");
+            }
+        });
+
 
         before("/editarArticulo",(request, response) -> {
             Session session = request.session();

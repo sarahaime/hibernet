@@ -41,11 +41,11 @@ public class Articulo {
 
 
     //todo: estas son las funciones para que el articulo traiga los likes dislikes
-    public int getLikesCount() {
+    public long getLikesCount() {
         return LikeArticuloServices.getInstancia().getLikesByArticuloID(id, 1);
     }
 
-    public int getDislikesCount() {
+    public long getDislikesCount() {
         return LikeArticuloServices.getInstancia().getLikesByArticuloID(id, 2);
     }
 

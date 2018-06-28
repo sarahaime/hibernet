@@ -30,17 +30,28 @@ public class LikeArticuloServices extends GestionDb<LikeArticulo>{
 
 
     //para like val = 1, para dislike val = 2
-    public int getLikesByArticuloID(long articuloID, int val){
+    public long getLikesByArticuloID(long articuloID, int val){
         EntityManager em = getEntityManager();
         Query query = em.createQuery("select count(*) from LikeArticulo l where l.articuloId =:articuloID and l.val =:val");
         query.setParameter("articuloID", articuloID);
         query.setParameter("val", val);
 
-        return (int)query.getSingleResult();
+        return (long) query.getSingleResult();
+    }
+
+    //para like val = 1, para dislike val = 2
+    public int getLikesByArticuloYUsuarioID(long articuloID, long usuarioID, int val){
+        EntityManager em = getEntityManager();
+        Query query = em.createQuery("select count(*) from LikeArticulo l where l.articuloId =:articuloID and l.val =:val and l.usuarioId =:usuarioID");
+        query.setParameter("articuloID", articuloID);
+        query.setParameter("val", val);
+        query.setParameter("usuarioID", usuarioID);
+
+        return query.getResultList().size();
     }
 
     //upsert likes
-    public void setLikes(int articuloID, int usuarioID, int val){
+    public void setLikes(long articuloID, long usuarioID, int val){
         EntityManager em = getEntityManager();
         Query query = em.createQuery("select l from LikeArticulo l where l.articuloId =:articuloID and l.usuarioId =:usuarioID");
         query.setParameter("articuloID", articuloID);
@@ -61,5 +72,4 @@ public class LikeArticuloServices extends GestionDb<LikeArticulo>{
         em.close();
         return;
     }
-
 }

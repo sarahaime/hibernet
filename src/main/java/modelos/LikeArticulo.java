@@ -7,10 +7,10 @@ import java.io.Serializable;
 public class LikeArticulo implements Serializable {
 
     @Id
-    private int articuloId;
+    private long articuloId;
 
     @Id
-    private int usuarioId;
+    private long usuarioId;
 
     private int val;
 
@@ -18,19 +18,19 @@ public class LikeArticulo implements Serializable {
 
 
 
-    public int getArticuloId() {
+    public long getArticuloId() {
         return articuloId;
     }
 
-    public void setArticuloId(int articuloId) {
+    public void setArticuloId(long articuloId) {
         this.articuloId = articuloId;
     }
 
-    public int getUsuarioId() {
+    public long getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(int usuarioId) {
+    public void setUsuarioId(long usuarioId) {
         this.usuarioId = usuarioId;
     }
 

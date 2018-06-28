@@ -1,11 +1,9 @@
 
 import modelos.Articulo;
 import modelos.Etiqueta;
+import modelos.LikeArticulo;
 import modelos.Usuario;
-import servicios.ArticuloServices;
-import servicios.ComentarioServices;
-import servicios.EtiquetaServices;
-import servicios.UsuarioServices;
+import servicios.*;
 
 import static java.lang.Math.max;
 import static spark.Spark.*;
@@ -97,16 +95,24 @@ public class ManejoRutas {
         });
 
         get("/ver", (request, response)->{
-            int id = Integer.parseInt(request.queryParams("id"));
+            long id = (long) Integer.parseInt(request.queryParams("id"));
+            Usuario usuario = request.session(true).attribute("usuario");
             ArticuloServices as = new ArticuloServices();
-            Articulo articulo = as.getArticulo((long) id);
+            LikeArticuloServices las = new LikeArticuloServices();
+            Articulo articulo = as.getArticulo( id);
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("articulo", articulo);
             modelo.put("comentarios", articulo.getComentarios());
             modelo.put("autor", articulo.getAutor().getNombre());
             modelo.put("etiquetas", articulo.getEtiquetas());
             modelo.put("registeredUser", getLogUser(request));
-
+            modelo.put("likesCount", las.getLikesByArticuloID(id, 1) );
+            modelo.put("dislikesCount", las.getLikesByArticuloID(id, 2) );
+            if(usuario != null) {
+                modelo.put("haVotado", las.getLikesByArticuloYUsuarioID(id, usuario.getId(), 1)
+                        + las.getLikesByArticuloYUsuarioID(id, usuario.getId(), 2));
+                modelo.put("votoGusta", las.getLikesByArticuloYUsuarioID(id, usuario.getId(), 1));
+            }
             return renderThymeleaf(modelo, "/articulo");
         });
 
@@ -189,7 +195,6 @@ public class ManejoRutas {
             String tags = request.queryParams("etiquetas");
             long id = (long) Integer.parseInt( request.queryParams("id"));
 
-            System.out.println(tags);
             as.actualizarArticulo(titulo, cuerpo, id, tags);
 
             response.redirect("/home");
@@ -220,27 +225,20 @@ public class ManejoRutas {
 
             return renderThymeleaf(modelo,"/home");
         });
-
-
-
-    }
     
     //ruta para el conteo de los likes
-        post("/articulo/${id}/votar", (request, response) -> {
-            String id = request.params("id");
-
-            ArticuloServices as = new ArticuloServices();
-            Articulo articulo = as.getArticulo(Long.parseLong(id));
+        post("/articulo/votar", (request, response) -> {
+             long articuloid = (long) Integer.parseInt(request.queryParams("articuloid"));
+             long usuarioid = (long) Integer.parseInt(request.queryParams("usuarioid"));
+            LikeArticuloServices las = new LikeArticuloServices();
 
             //aqui true se refiere a me gusta
             if (request.queryMap().get("voto").value().equals("true")) {
-                articulo.setLikesCount(articulo.getLikesCount() + 1);
+                las.setLikes(articuloid, usuarioid, 1);
             } else {
-                articulo.setDislikesCount(articulo.getDislikesCount() + 1);
+                las.setLikes(articuloid, usuarioid, 2);
             }
-
-            response.redirect("/articulo/" + id);
-
+            response.redirect("/ver?id=" + articuloid);
             return null;
         });
     }
